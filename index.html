@@ -1,88 +1,572 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PARS PMC | Operasyon Merkezi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+
     <style>
-        /* --- GLOBAL FIX: SAĞA KAYMAYI ENGELLE --- */
-        html, body {
+        /* --- GLOBAL RESET --- */
+        html,
+        body {
             max-width: 100%;
-            overflow-x: hidden !important; /* Sağa kaymayı kesin engeller */
+            overflow-x: hidden !important;
         }
 
-        :root { --primary: #d4af37; --bg-dark: #050505; --text: #e0e0e0; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
+        :root {
+            --primary: #d4af37;
+            --bg-dark: #050505;
+            --text: #e0e0e0;
+            --green: #00ff41;
+            --red: #ff3333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at center, #111 0%, #000 100%);
-            color: var(--text); font-family: 'Rajdhani', sans-serif;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
             padding-top: 100px;
+            position: relative;
+        }
+
+        /* SCANLINE EFFECT */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.1) 0px,
+                    rgba(0, 0, 0, 0.1) 1px,
+                    transparent 1px,
+                    transparent 2px);
+            pointer-events: none;
+            z-index: 9998;
+            animation: scanlines 0.5s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scanlines {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(2px);
+            }
         }
 
         /* NAVBAR */
         .navbar {
-            position: fixed; top: 0; left: 0; width: 100%; min-height: 80px;
-            background: rgba(5, 5, 5, 0.98); border-bottom: 2px solid var(--primary);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; z-index: 9999; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 80px;
+            background: rgba(5, 5, 5, 0.95);
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            z-index: 9999;
+            box-shadow: 0 5px 30px rgba(212, 175, 55, 0.1);
         }
-        .logo { font-family: 'Black Ops One'; font-size: 24px; color: var(--primary); text-decoration: none; }
 
-        .nav-links { display: flex; gap: 10px; }
-        .nav-links a {
-            color: #fff; text-decoration: none; font-weight: 700; font-size: 14px;
-            text-transform: uppercase; padding: 8px 10px; border-radius: 4px; transition: 0.3s;
+        .navbar::after {
+            content: 'SECURE CONNECTION';
+            position: absolute;
+            right: 20px;
+            top: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            color: var(--green);
+            animation: blink 1s infinite;
         }
-        .nav-links a.active { background: rgba(212, 175, 55, 0.2); color: var(--primary); border: 1px solid var(--primary); }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .logo {
+            font-family: 'Black Ops One';
+            font-size: 24px;
+            color: var(--primary);
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            position: relative;
+        }
+
+        .logo::before {
+            content: '◆';
+            margin-right: 8px;
+            animation: pulse-icon 2s infinite;
+        }
+
+        @keyframes pulse-icon {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transition: left 0.4s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .nav-links a.active {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
 
         @media (max-width: 768px) {
-            .navbar { flex-direction: column; padding: 15px 0; width: 100%; }
-            .logo { margin-bottom: 10px; font-size: 28px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; gap: 5px; width: 100%; }
-            .nav-links a { font-size: 13px; background: #111; border: 1px solid #333; width: 45%; text-align: center; margin: 2px; }
-            body { padding-top: 170px; }
+            .navbar {
+                flex-direction: column;
+                padding: 15px 0;
+                width: 100%;
+            }
+
+            .navbar::after {
+                display: none;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+                font-size: 28px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px;
+                width: 100%;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                background: #111;
+                border: 1px solid #333;
+                width: 45%;
+                text-align: center;
+                margin: 2px;
+            }
+
+            body {
+                padding-top: 170px;
+            }
         }
 
-        /* HERO BÖLÜMÜ */
+        /* HERO SECTION */
         .hero {
-            min-height: calc(100vh - 170px); display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; text-align: center; padding: 20px;
+            min-height: calc(100vh - 170px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
             width: 100%;
+            position: relative;
         }
-        .hero-logo { 
-            width: 280px; max-width: 80%; 
-            filter: drop-shadow(0 0 20px var(--primary)); 
-            animation: pulse 3s infinite alternate; 
-        }
-        @keyframes pulse { from {transform: scale(1);} to {transform: scale(1.05);} }
 
-        h1 { 
-            font-family: 'Black Ops One'; font-size: 3.5rem; margin: 20px 0; color: #fff; 
-            text-shadow: 0 0 20px rgba(0,0,0,0.8); line-height: 1.1; width: 100%;
+        /* TACTICAL FRAME */
+        .tactical-frame {
+            position: relative;
+            padding: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
         }
-        
+
+        .tactical-frame::before,
+        .tactical-frame::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+        }
+
+        .tactical-frame::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .tactical-frame::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .hero-logo {
+            width: 280px;
+            max-width: 80%;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.5));
+            animation: logo-pulse 3s infinite alternate;
+            border: 3px solid var(--primary);
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes logo-pulse {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5));
+            }
+
+            100% {
+                transform: scale(1.02);
+                filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.8));
+            }
+        }
+
+        /* TYPING EFFECT HEADER */
+        .typing-container {
+            margin: 30px 0 20px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Black Ops One';
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 10px rgba(212, 175, 55, 0.3);
+            line-height: 1.1;
+            width: 100%;
+            animation: glitch-text 5s infinite;
+        }
+
+        @keyframes glitch-text {
+
+            0%,
+            90%,
+            100% {
+                transform: translate(0);
+            }
+
+            92% {
+                transform: translate(-2px, 1px);
+            }
+
+            94% {
+                transform: translate(2px, -1px);
+            }
+
+            96% {
+                transform: translate(-1px, 2px);
+            }
+
+            98% {
+                transform: translate(1px, -2px);
+            }
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.3rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subtitle::after {
+            content: '|';
+            animation: cursor-blink 0.8s infinite;
+            margin-left: 5px;
+            color: var(--primary);
+        }
+
+        @keyframes cursor-blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* STATUS INDICATORS */
+        .status-bar {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: status-pulse 1.5s infinite;
+        }
+
+        .status-dot.warning {
+            background: #ffaa00;
+        }
+
+        @keyframes status-pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 5px currentColor;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* MAIN BUTTON */
         .btn-main {
-            padding: 15px 40px; border: 2px solid var(--primary); color: var(--primary);
-            font-size: 1.2rem; font-weight: bold; text-decoration: none; text-transform: uppercase;
-            transition: 0.4s; position: relative; display: inline-block; margin-top: 20px;
-            background: rgba(0,0,0,0.5);
+            padding: 18px 50px;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            position: relative;
+            display: inline-block;
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            font-family: 'Black Ops One';
+            letter-spacing: 2px;
+            overflow: hidden;
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
         }
-        .btn-main:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
+
+        .btn-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-main:hover::before {
+            left: 100%;
+        }
+
+        .btn-main:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* CORNER DECORATIONS */
+        .corner-decoration {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .corner-decoration.top-left {
+            top: 100px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-decoration.top-right {
+            top: 100px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-decoration.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-decoration.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+
+        @media (max-width: 768px) {
+            .corner-decoration {
+                display: none;
+            }
+        }
+
+        /* FLOATING PARTICLES */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
+            opacity: 0.3;
+            animation: float-particle 15s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.3;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
         @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            p { font-size: 1rem !important; padding: 0 10px; }
-            .btn-main { width: 100%; max-width: 300px; padding: 15px; }
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem !important;
+                letter-spacing: 1px;
+            }
+
+            .btn-main {
+                width: 90%;
+                max-width: 300px;
+                padding: 15px 20px;
+                font-size: 1rem;
+            }
+
+            .tactical-frame {
+                padding: 20px;
+                margin: 0 10px;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
         }
     </style>
 </head>
+
 <body>
+    <!-- CORNER DECORATIONS -->
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+
+    <!-- PARTICLES -->
+    <div class="particles" id="particles"></div>
 
     <nav class="navbar">
         <a href="index.html" class="logo">PARS PMC</a>
@@ -96,13 +580,62 @@
     </nav>
 
     <section class="hero">
-        <img src="img/pars-logo.jpg" alt="Logo" class="hero-logo" data-aos="zoom-in" data-aos-duration="1500">
-        <h1 data-aos="fade-up" data-aos-delay="300">GÖLGELERİN İÇİNDE<br><span style="color:var(--primary)">ZAFERİN PEŞİNDE</span></h1>
-        <p style="color:#ccc; font-size:1.3rem;" data-aos="fade-up" data-aos-delay="500">Profesyonel Taktik Simülasyon Birliği</p>
-        <a href="basvuru.html" class="btn-main" data-aos="flip-up" data-aos-delay="700">KATIL</a>
+        <div class="tactical-frame">
+            <img src="img/pars-logo.jpg" alt="PARS PMC Logo" class="hero-logo">
+
+            <div class="typing-container">
+                <h1>GÖLGELERİN İÇİNDE<br><span style="color:var(--primary)">ZAFERİN PEŞİNDE</span></h1>
+            </div>
+
+            <p class="subtitle" id="typewriter"></p>
+
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-dot"></div>
+                    <span>SİSTEM AKTİF</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot"></div>
+                    <span>OPERASYONEL</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot warning"></div>
+                    <span>ALIM AÇIK</span>
+                </div>
+            </div>
+
+            <a href="basvuru.html" class="btn-main">
+                <i class="fas fa-shield-alt"></i> OPERASYONA KATIL
+            </a>
+        </div>
     </section>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>AOS.init({ disable: 'mobile' }); /* Telefondaki aşırı animasyonları kapatarak kaymayı önler */</script>
+    <script>
+        // TYPEWRITER EFFECT
+        const text = "PROFESYONEL TAKTİK SİMÜLASYON BİRLİĞİ";
+        let index = 0;
+        const typewriter = document.getElementById('typewriter');
+
+        function type() {
+            if (index < text.length) {
+                typewriter.textContent = text.substring(0, index + 1);
+                index++;
+                setTimeout(type, 80);
+            }
+        }
+        setTimeout(type, 1000);
+
+        // PARTICLE GENERATOR
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    </script>
 </body>
+
 </html>

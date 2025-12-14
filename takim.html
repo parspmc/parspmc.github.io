@@ -1,73 +1,813 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Takım</title>
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>PARS PMC | Operasyon Kadrosu</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <style>
         /* GLOBAL FIX */
-        html, body { max-width: 100%; overflow-x: hidden !important; }
-
-        :root { --primary: #d4af37; --bg-dark: #050505; --text: #e0e0e0; --success: #00ff00; --danger: #ff0000; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-dark); color: var(--text); font-family: 'Rajdhani', sans-serif; padding-top: 100px; }
-
-        /* NAVBAR (AYNI) */
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; min-height: 80px; background: rgba(5,5,5,0.98); border-bottom: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; z-index: 9999; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .logo { font-family: 'Black Ops One'; font-size: 24px; color: var(--primary); text-decoration: none; }
-        .nav-links { display: flex; gap: 10px; }
-        .nav-links a { color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; text-transform: uppercase; padding: 8px 10px; border-radius: 4px; transition: 0.3s; }
-        .nav-links a.active { background: rgba(212, 175, 55, 0.2); color: var(--primary); border: 1px solid var(--primary); }
-        
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; padding: 15px 0; width: 100%; }
-            .nav-links { flex-wrap: wrap; justify-content: center; gap: 5px; width: 100%; }
-            .nav-links a { font-size: 13px; background: #111; border: 1px solid #333; width: 45%; text-align: center; margin: 2px; }
-            body { padding-top: 170px; }
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden !important;
         }
 
-        /* GRID */
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; width: 100%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 100%; }
-        
-        /* MOBİL GRID FIX */
-        @media (max-width: 600px) { .grid { display: flex; flex-direction: column; } .card { width: 100%; } }
+        :root {
+            --primary: #d4af37;
+            --bg-dark: #050505;
+            --text: #e0e0e0;
+            --green: #00ff41;
+            --red: #ff3333;
+        }
 
-        .card { background: #111; border: 1px solid #333; text-align: center; transition: 0.3s; position: relative; cursor: pointer; border-bottom: 3px solid var(--primary); width: 100%; }
-        .card-img-box { width: 100%; height: 350px; overflow: hidden; position: relative; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; filter: grayscale(100%); }
-        .card:hover .card-img { filter: grayscale(0%); transform: scale(1.05); }
-        .card-info { padding: 20px; background: #111; }
-        .card h3 { color: var(--primary); font-family: 'Black Ops One'; font-size: 1.8rem; }
-        .rank { color: #888; font-weight: bold; letter-spacing: 2px; }
-        .overlay-scan { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(212,175,55,0.1); display:flex; align-items:center; justify-content:center; opacity:0; color:var(--primary); font-family:'Black Ops One'; font-size:1.5rem; letter-spacing:2px; border:2px solid var(--primary); }
-        .card:hover .overlay-scan { opacity:1; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px); padding: 10px; }
-        .dossier { background: #0a0a0a; border: 2px solid var(--primary); width: 100%; max-width: 900px; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; }
-        .dossier-img { flex: 1; min-width: 300px; height: 500px; object-fit: cover; border-right: 2px solid var(--primary); }
-        .dossier-info { flex: 1.5; padding: 30px; }
-        .dossier-header h2 { font-family: 'Black Ops One'; font-size: 2.5rem; color: var(--primary); line-height: 1; margin-bottom: 5px; }
-        .stat-row { margin-bottom: 12px; display: flex; align-items: center; }
-        .stat-label { min-width: 120px; color: var(--primary); font-weight: bold; }
-        .stat-value { color: #fff; }
-        .status-badge { padding: 5px 10px; border-radius: 4px; font-weight: bold; font-family: 'Black Ops One'; }
-        .status-active { background: rgba(0,255,0,0.1); color: #00ff00; border: 1px solid #00ff00; }
-        .status-inactive { background: rgba(255,0,0,0.1); color: #ff0000; border: 1px solid #ff0000; }
-        .close-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; background: rgba(0,0,0,0.8); color: white; border-radius: 50%; text-align: center; line-height: 40px; font-size: 24px; cursor: pointer; z-index: 999; border: 1px solid var(--primary); }
+        body {
+            background: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            padding-top: 100px;
+        }
+
+        /* SCANLINE EFFECT */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.1) 0px,
+                    rgba(0, 0, 0, 0.1) 1px,
+                    transparent 1px,
+                    transparent 2px);
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.2;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 80px;
+            background: rgba(5, 5, 5, 0.95);
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            z-index: 9999;
+            box-shadow: 0 5px 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .navbar::after {
+            content: 'CLASSIFIED DATABASE';
+            position: absolute;
+            right: 20px;
+            top: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            color: var(--primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .logo {
+            font-family: 'Black Ops One';
+            font-size: 24px;
+            color: var(--primary);
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .logo::before {
+            content: '◆';
+            margin-right: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transition: left 0.4s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
 
         @media (max-width: 768px) {
-            .dossier { flex-direction: column; height: auto; max-height: 85vh; }
-            .dossier-img { width: 100%; height: 250px; border-right: none; border-bottom: 2px solid var(--primary); }
-            .dossier-info { padding: 20px; }
+            .navbar {
+                flex-direction: column;
+                padding: 15px 0;
+                width: 100%;
+            }
+
+            .navbar::after {
+                display: none;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+                font-size: 28px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px;
+                width: 100%;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                background: #111;
+                border: 1px solid #333;
+                width: 45%;
+                text-align: center;
+                margin: 2px;
+            }
+
+            body {
+                padding-top: 170px;
+            }
+        }
+
+        /* CONTAINER & GRID */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding: 20px;
+        }
+
+        .page-header::before,
+        .page-header::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            top: 50%;
+        }
+
+        .page-header::before {
+            left: 0;
+        }
+
+        .page-header::after {
+            right: 0;
+        }
+
+        .page-title {
+            font-family: 'Black Ops One';
+            color: var(--primary);
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            letter-spacing: 3px;
+        }
+
+        .page-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        .page-subtitle span {
+            color: var(--green);
+            animation: blink 1s infinite;
+        }
+
+        @media (max-width: 768px) {
+
+            .page-header::before,
+            .page-header::after {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* TEAM GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .grid {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+
+        /* DOSSIER CARD */
+        .card {
+            background: linear-gradient(145deg, #0a0a0a, #111);
+            border: 1px solid #333;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            width: 100%;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+        }
+
+        .card::before {
+            content: 'DOSYA';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            color: var(--primary);
+            z-index: 10;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .card:hover::after {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        /* CARD IMAGE */
+        .card-img-box {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .card-img-box {
+                height: 300px;
+            }
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.6s ease;
+            filter: grayscale(70%) contrast(1.1);
+        }
+
+        .card:hover .card-img {
+            filter: grayscale(0%) contrast(1);
+            transform: scale(1.08);
+        }
+
+        @media (max-width: 768px) {
+            .card-img {
+                filter: grayscale(30%);
+            }
+        }
+
+        /* SCAN OVERLAY */
+        .overlay-scan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(212, 175, 55, 0.1) 50%, rgba(0, 0, 0, 0.5) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .overlay-scan i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            animation: scan-pulse 1.5s infinite;
+        }
+
+        @keyframes scan-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        .overlay-scan span {
+            color: var(--primary);
+            font-family: 'Black Ops One';
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .card:hover .overlay-scan {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .overlay-scan {
+                opacity: 1;
+                background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+                justify-content: flex-end;
+                padding-bottom: 80px;
+            }
+
+            .overlay-scan i {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            .overlay-scan span {
+                font-size: 1rem;
+            }
+        }
+
+        /* CARD INFO */
+        .card-info {
+            padding: 20px;
+            background: linear-gradient(180deg, #0a0a0a, #111);
+            border-top: 1px solid #333;
+            position: relative;
+        }
+
+        .card-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-family: 'Black Ops One';
+            font-size: 1.6rem;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .rank {
+            color: #888;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 3px 10px;
+            margin-top: 10px;
+            font-size: 0.7rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 1px;
+            border-radius: 2px;
+        }
+
+        .status-indicator.active {
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+
+        .status-indicator.inactive {
+            background: rgba(255, 51, 51, 0.1);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+
+        /* ============ DOSSIER MODAL ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+        }
+
+        .dossier {
+            background: linear-gradient(145deg, #0a0a0a, #111);
+            border: 2px solid var(--primary);
+            width: 100%;
+            max-width: 950px;
+            display: flex;
+            flex-wrap: wrap;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin: auto;
+            animation: dossier-open 0.5s ease;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            /* Scrollbar gizleme */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+        }
+
+        .dossier::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Chrome/Safari */
+        .modal::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes dossier-open {
+            0% {
+                transform: scale(0.8) rotateX(10deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* DOSSIER HEADER BAR */
+        .dossier-header-bar {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), #a88b2a);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dossier-header-bar span {
+            font-family: 'Black Ops One';
+            color: #000;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .classification {
+            background: #000;
+            color: var(--red);
+            padding: 3px 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            border: 1px solid var(--red);
+            animation: classification-blink 1s infinite;
+        }
+
+        @keyframes classification-blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .dossier-img {
+            flex: 1;
+            min-width: 300px;
+            height: 450px;
+            object-fit: cover;
+            border-right: 2px solid var(--primary);
+            filter: contrast(1.1);
+        }
+
+        .dossier-info {
+            flex: 1.5;
+            padding: 30px;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .dossier-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="50" font-family="monospace" font-size="12" fill="%23d4af3730" transform="rotate(-45 50 50)">CLASSIFIED</text></svg>');
+            opacity: 0.5;
+        }
+
+        .dossier-header h2 {
+            font-family: 'Black Ops One';
+            font-size: 2.2rem;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .dossier-header .role-badge {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--primary);
+            padding: 5px 15px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .stat-row {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 2px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .stat-row:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .stat-label {
+            min-width: 110px;
+            color: var(--primary);
+            font-weight: bold;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 0;
+            font-weight: bold;
+            font-family: 'Black Ops One';
+            letter-spacing: 2px;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--green);
+            border: 1px solid var(--green);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+        }
+
+        .status-inactive {
+            background: rgba(255, 51, 51, 0.1);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+
+        .dossier-desc {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed #333;
+            position: relative;
+        }
+
+        .dossier-desc::before {
+            content: 'NOTLAR';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #111;
+            padding: 0 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 2px;
+        }
+
+        .dossier-desc p {
+            line-height: 1.8;
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            color: #000;
+            border-radius: 0;
+            text-align: center;
+            line-height: 45px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .close-btn:hover {
+            background: #fff;
+            transform: rotate(90deg);
+        }
+
+        /* MOBILE MODAL */
+        @media (max-width: 768px) {
+            .modal {
+                padding: 10px;
+            }
+
+            .dossier {
+                flex-direction: column;
+                max-height: none;
+                width: 100%;
+            }
+
+            .dossier-header-bar {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+
+            .dossier-img {
+                width: 100%;
+                min-width: 100%;
+                height: 250px;
+                border-right: none;
+                border-bottom: 2px solid var(--primary);
+            }
+
+            .dossier-info {
+                padding: 20px;
+                min-width: 100%;
+            }
+
+            .dossier-header h2 {
+                font-size: 1.6rem;
+            }
+
+            .stat-row {
+                flex-direction: column;
+            }
+
+            .stat-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+
+            .close-btn {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+            }
+        }
+
+        /* LOADING ANIMATION ON CARDS */
+        .card {
+            animation: card-load 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes card-load {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <a href="index.html" class="logo">PARS PMC</a>
@@ -79,38 +819,73 @@
             <a href="basvuru.html">BAŞVUR</a>
         </div>
     </nav>
+
     <div class="container">
-        <h2 style="text-align:center; font-family:'Black Ops One'; color:var(--primary); margin-bottom:30px; font-size:2rem;" data-aos="zoom-in">OPERASYON KADROSU</h2>
+        <div class="page-header">
+            <h2 class="page-title">OPERASYON KADROSU</h2>
+            <p class="page-subtitle">PERSONEL VERİTABANI <span>●</span> AKTİF</p>
+        </div>
         <div class="grid" id="team-grid"></div>
     </div>
-    <div id="dossierModal" class="modal">
+
+    <div id="dossierModal" class="modal" onclick="if(event.target.id==='dossierModal')closeDossier()">
         <div class="dossier">
-            <div class="close-btn" onclick="closeDossier()">&times;</div>
+            <div class="close-btn" onclick="closeDossier()">×</div>
+            <div class="dossier-header-bar">
+                <span><i class="fas fa-folder-open"></i> PERSONEL DOSYASI</span>
+                <div class="classification">GİZLİ</div>
+            </div>
             <img id="pImg" src="" class="dossier-img">
             <div class="dossier-info">
-                <div class="dossier-header"><h2 id="pName">AD</h2><span id="pRole">GÖREV</span></div><br>
-                <div class="stat-row"><div class="stat-label">TECRÜBE:</div><div class="stat-value" id="pExp"></div></div>
-                <div class="stat-row"><div class="stat-label">UZMANLIK:</div><div class="stat-value" id="pWeapon"></div></div>
-                <div class="stat-row"><div class="stat-label">DURUM:</div><div id="pStatus" class="status-badge"></div></div>
-                <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
-                <p id="pDesc" style="line-height:1.6; color:#ccc;"></p>
+                <div class="dossier-header">
+                    <h2 id="pName">AD</h2>
+                    <div class="role-badge" id="pRole">GÖREV</div>
+                </div>
+                <br>
+                <div class="stat-row">
+                    <div class="stat-label"><i class="fas fa-clock"></i> TECRÜBE:</div>
+                    <div class="stat-value" id="pExp"></div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-label"><i class="fas fa-crosshairs"></i> UZMANLIK:</div>
+                    <div class="stat-value" id="pWeapon"></div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-label"><i class="fas fa-signal"></i> DURUM:</div>
+                    <div id="pStatus" class="status-badge"></div>
+                </div>
+                <div class="dossier-desc">
+                    <p id="pDesc"></p>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
     <script src="config.js"></script>
     <script>
-        AOS.init({ disable: 'mobile' });
         const teamGrid = document.getElementById('team-grid');
+
         SITE_DATA.team.forEach((member, index) => {
+            const statusClass = member.durum === 'OPERASYONEL' ? 'active' : 'inactive';
             const html = `
-                <div class="card" data-aos="fade-up" data-aos-delay="${index*100}" 
+                <div class="card" style="animation-delay: ${index * 0.1}s"
                     onclick="openDossier('${member.kodAdi}', '${member.rutbe}', '${member.tecrube}', '${member.silah}', '${member.durum}', '${member.resim}', '${member.aciklama}')">
-                    <div class="card-img-box"><img src="${member.resim}" class="card-img"><div class="overlay-scan">DOSYAYI AÇ</div></div>
-                    <div class="card-info"><h3>${member.kodAdi}</h3><span class="rank">${member.rutbe}</span></div>
+                    <div class="card-img-box">
+                        <img src="${member.resim}" class="card-img" alt="${member.kodAdi}">
+                        <div class="overlay-scan">
+                            <i class="fas fa-fingerprint"></i>
+                            <span>DOSYAYI AÇ</span>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>${member.kodAdi}</h3>
+                        <span class="rank">${member.rutbe}</span>
+                        <div class="status-indicator ${statusClass}">${member.durum}</div>
+                    </div>
                 </div>`;
             teamGrid.innerHTML += html;
         });
+
         function openDossier(name, role, exp, weapon, status, img, desc) {
             document.getElementById('dossierModal').style.display = 'flex';
             document.getElementById('pName').innerText = name;
@@ -119,11 +894,24 @@
             document.getElementById('pWeapon').innerText = weapon;
             document.getElementById('pImg').src = img;
             document.getElementById('pDesc').innerText = desc;
+
             const sBox = document.getElementById('pStatus');
             sBox.innerText = status;
             sBox.className = status === 'OPERASYONEL' ? 'status-badge status-active' : 'status-badge status-inactive';
+
+            document.body.style.overflow = 'hidden';
         }
-        function closeDossier() { document.getElementById('dossierModal').style.display = 'none'; }
+
+        function closeDossier() {
+            document.getElementById('dossierModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // ESC tuşu ile kapatma
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeDossier();
+        });
     </script>
 </body>
+
 </html>
